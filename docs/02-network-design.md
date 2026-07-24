@@ -52,6 +52,16 @@ routing, and inter-VLAN firewall rules.
 A WireGuard VPN is configured on pfSense to allow secure remote management
 of the lab without exposing the web GUI directly to the host network.
 
+### Status
+WireGuard is fully configured on pfSense (tunnel, peer, keys, firewall
+rule on OPT1). Initial connectivity testing from the host machine over
+VirtualBox's Host-Only adapter did not complete a handshake, despite
+firewall rules, keys, and clock sync all being verified correct. This is
+suspected to be a VirtualBox Host-Only UDP hairpin routing limitation
+(host and VM on the same physical machine), which is a known category of
+issue distinct from a genuinely external client. Full validation is
+planned once a lab VM or external device is available to test from.
+
 ## Design Decisions
 See `/docs/adr/` for detailed reasoning behind key architecture choices,
 including why VLAN 10 (originally planned as a separate tagged Management
