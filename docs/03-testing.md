@@ -105,3 +105,31 @@ Result: 3/3 lost, 100% packet loss. Denied as expected.
 correctly. Attacker-to-Victim traffic (the lab's core use case) works;
 Victim-to-Attacker traffic (which should never happen in a real intrusion
 scenario) is blocked by default-deny, with no explicit rule needed.
+
+## Test 5: Legacy Zone (Metasploitable2 - Non-VLAN-Capable Host)
+
+**Context:** Metasploitable2 runs an intentionally outdated Ubuntu 8.04
+base with dead package repositories, making 802.1q VLAN tooling (`vconfig`
+or the `vlan` package) unavailable. Rather than force VLAN tagging on an
+incompatible legacy system, a dedicated untagged segment was created.
+
+**Setup:**
+- New VirtualBox Internal Network: `soclab-legacy`
+- New pfSense interface: OPT5LEGACY (em3), static IP `10.10.40.1/24`
+- Metasploitable2 connected directly (untagged) via `ifconfig`/`route`
+  (no VLAN sub-interface needed)
+- Firewall rules: Attacker -> Legacy allowed; Legacy -> Victims allowed;
+  Victims -> Legacy not explicitly permitted (denied by default)
+
+**Results:**
+| Test | Result |
+|---|---|
+| Kali (Attacker) -> Metasploitable2 | Pass, 0% loss, TTL=63 |
+| Ubuntu-Victim -> Metasploitable2 | Fail, 100% loss (expected - no rule) |
+
+**Conclusion:** Legacy/non-taggable systems can be integrated into the lab
+via a dedicated interface and segment rather than in-VM tagging, while
+still enforcing the same zone-based access policy as tagged VLANs. This
+mirrors a real-world scenario where old infrastructure can't support
+modern network features and must be isolated at the switch/firewall level
+instead.
