@@ -76,3 +76,32 @@ successful end-to-end demonstration of the lab's core purpose.
 - Only host-to-gateway and one Attacker->Victim path have been tested.
   Additional victim hosts (Windows, Metasploitable2) still need to be
   built and validated the same way.
+
+  ## Test 4: Firewall Policy Enforcement (Victims -> Attacker Denial)
+
+**Goal:** Prove the documented isolation policy is actually enforced, not
+just configured — Attacker can reach Victims, but Victims cannot reach
+Attacker.
+
+**Setup:** Rules were tightened from initial permissive (Any/Any) testing
+rules to properly scoped versions:
+- OPT4ATTACKER: source `Attacker_Net`, destination `Victims_Net` only
+- OPT3VICTIMS: source `10.10.20.0/24`, destination `10.10.10.0/24` only
+  (Attacker zone intentionally excluded, falls through to default-deny)
+
+**Test A - Attacker -> Victim (from Kali-Attacker):**
+```bash
+ping -c 3 10.10.20.20
+```
+Result: 3/3 received, 0% packet loss. Allowed as expected.
+
+**Test B - Victim -> Attacker (from Ubuntu-Victim):**
+```bash
+ping -c 3 10.10.30.100
+```
+Result: 3/3 lost, 100% packet loss. Denied as expected.
+
+**Conclusion:** The firewall enforces asymmetric, zone-based access control
+correctly. Attacker-to-Victim traffic (the lab's core use case) works;
+Victim-to-Attacker traffic (which should never happen in a real intrusion
+scenario) is blocked by default-deny, with no explicit rule needed.
