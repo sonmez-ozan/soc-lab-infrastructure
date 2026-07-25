@@ -1,20 +1,17 @@
-# ADR 002: Use pfSense Community Edition over OPNsense
+# ADR-002: pfSense CE Over OPNsense
 
-## Status
-Accepted
+**Status:** Accepted
 
 ## Context
-Both pfSense CE and OPNsense are free, FreeBSD-based, open-source
-firewall/router platforms suitable for a home SOC lab. pfSense requires
-creating a free Netgate store account to download the installer; OPNsense
-does not require any account.
+
+Both pfSense CE and OPNsense are free, open-source firewall/router distributions built on FreeBSD's `pf` packet filter. pfSense's current download flow requires creating a free Netgate account and going through their store checkout (even for the $0 Community Edition); OPNsense requires no account at all for its ISO download.
 
 ## Decision
-Use pfSense Community Edition 2.8.1.
+
+Use pfSense CE despite the account/checkout friction, primarily for its larger install base and more extensive third-party tutorial/documentation availability — valuable for a learning-focused first build.
 
 ## Consequences
-- Extra friction during download (Netgate account/checkout required)
-- pfSense has a larger install base and more available tutorials/community
-  documentation, which is valuable while still learning
-- Skills transfer closely to OPNsense if switched later, since both share
-  the same FreeBSD/pf firewall foundation
+
+- One extra account-creation step during setup that OPNsense would have avoided.
+- Broader community documentation made troubleshooting (VLANs, WireGuard, interface assignment) easier to research throughout this build.
+- The underlying `pf`-based firewall concepts transfer directly to OPNsense if a future project wants to compare the two.

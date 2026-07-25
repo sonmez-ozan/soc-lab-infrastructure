@@ -1,23 +1,19 @@
-# ADR 001: Use Internal Network instead of Bridged Network
+# ADR-001: Use VirtualBox Internal Network Instead of Bridged Networking
 
-## Status
-Accepted
+**Status:** Accepted
 
 ## Context
-The lab needs Kali Linux to actively attack other VMs (Metasploitable2,
-Windows/Ubuntu victims). This traffic must never reach the home network,
-both for safety and to avoid any legal/ethical issues with scanning or
-attacking devices outside the lab.
+
+VirtualBox offers several networking modes for VM adapters, most notably **Bridged** (VM appears as a real device on the physical home network) and **Internal Network** (a private virtual switch visible only to VMs explicitly attached to it).
+
+This lab intentionally includes an attacker VM (Kali) running real scanning/exploitation tooling against deliberately vulnerable targets (Metasploitable2, an intentionally-weak Windows config). If any of this traffic reached the physical home network, it could affect other real devices on that network.
 
 ## Decision
-Use VirtualBox's "Internal Network" type (named `soclab-net`) for all lab
-VMs, rather than "Bridged Adapter" (which would place VMs directly on the
-home LAN) or "NAT Network" (which still routes toward the host's network
-stack more directly than desired).
+
+Use VirtualBox **Internal Network** (`soclab-net`, `soclab-legacy`, `soclab-win`) for all lab-internal traffic. Only pfSense's WAN interface uses NAT, purely for outbound internet access (package updates, downloads) — no lab VM is ever bridged onto the physical network directly.
 
 ## Consequences
-- Lab traffic is fully isolated from the home network by default
-- VMs on `soclab-net` have no external connectivity unless routed through
-  pfSense, so a gateway VM is required for internet access (updates, etc.)
-- Slightly more setup complexity than Bridged, but the isolation is worth
-  it for a lab designed to run real attack simulations
+
+- The lab is fully contained — even a real, successful "attack" from Kali cannot leave the virtual environment.
+- Host GUI access to pfSense required an extra dedicated Host-only interface (`HOSTACCESS`), since the isolated LAN segment isn't reachable from the host by design.
+- Remote access to the lab (outside the host machine) requires the WireGuard VPN tunnel rather than simple bridged-network reachability.
