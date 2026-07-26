@@ -1,7 +1,7 @@
 # ADR 004: Segment the lab network into VLANs
 
 ## Status
-Accepted
+Accepted — the VLAN 10 (Management) portion below was later superseded; see [ADR-006](006-drop-management-vlan.md). Victims (VLAN 20) and Attacker (VLAN 30) proceeded as decided here.
 
 ## Context
 The initial design placed all lab VMs on a single flat `10.10.10.0/24`
