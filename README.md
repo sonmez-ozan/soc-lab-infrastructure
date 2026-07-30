@@ -28,11 +28,13 @@ Remote admin access goes through a WireGuard tunnel rather than exposing the pfS
 | Metasploitable2 (Legacy zone) | Working, persistent |
 | Windows 11 (Win zone + RDP) | Working, persistent |
 | Full cold-boot connectivity test | Passed |
-| Automation scripts | Not started |
+| Automation scripts | Done |
+| Firewall config reference | Done |
+| Screenshots | Shot list ready, pending capture |
 
 ## Network Architecture
 
-![Network Topology](diagrams/network-topology.svg)
+![Network Topology](diagrams/network-topology.png)
 
 | Zone | pfSense Interface | Port | Subnet | Gateway | Tagged |
 |---|---|---|---|---|---|
@@ -64,6 +66,8 @@ Kali and Ubuntu tag their own traffic (802.1Q) and share one trunked network. Me
 - [`docs/04-installation/`](docs/04-installation) — per-VM build steps
 - [`docs/adr/`](docs/adr) — architecture decision records
 - [`docs/05-lessons-learned.md`](docs/05-lessons-learned.md) — troubleshooting notes worth keeping
+- [`scripts/`](scripts) — automation to reproduce the network setup
+- [`configs/`](configs) — firewall rule reference and pfSense config export instructions
 
 ## Credentials
 

@@ -9,7 +9,7 @@
 
 ## Final Architecture
 
-![Network Topology](../diagrams/network-topology.svg)
+![Network Topology](../diagrams/network-topology.png)
 
 | Zone | pfSense Interface | Underlying Port | VirtualBox Network | Subnet | Gateway | Tagged? |
 |---|---|---|---|---|---|---|
